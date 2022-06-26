@@ -9,7 +9,7 @@ interface props {
   handleAdd: (e: React.FormEvent) => void;
 }
 
-const InputField: React.FC<props> = ({ slug, setSlug, id, setId, handleAdd }) => {
+const InputField: React.FC<props> = ({slug, setSlug, id, setId, handleAdd }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
