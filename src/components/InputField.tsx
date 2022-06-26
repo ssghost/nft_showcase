@@ -2,12 +2,14 @@ import React, { useRef } from "react";
 import "./styles.css";
 
 interface props {
-  todo: string;
-  setTodo: React.Dispatch<React.SetStateAction<string>>;
+  name: string;
+  setName: React.Dispatch<React.SetStateAction<string>>;
+  id: number;
+  setId : React.Dispatch<React.SetStateAction<number>>; 
   handleAdd: (e: React.FormEvent) => void;
 }
 
-const InputField: React.FC<props> = ({ todo, setTodo, handleAdd }) => {
+const InputField: React.FC<props> = ({ name, setName, id, setId, handleAdd }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
@@ -20,14 +22,22 @@ const InputField: React.FC<props> = ({ todo, setTodo, handleAdd }) => {
     >
       <input
         type="text"
-        placeholder="Enter a Task"
-        value={todo}
+        placeholder="Enter an NFT Name"
+        value={name}
         ref={inputRef}
-        onChange={(e) => setTodo(e.target.value)}
+        onChange={(e) => setName(e.target.value)}
+        className="input__box"
+      />
+      <input
+        type="text"
+        placeholder="Enter an NFT Id"
+        value={id}
+        ref={inputRef}
+        onChange={(e) => setId(Number(e.target.value))}
         className="input__box"
       />
       <button type="submit" className="input_submit">
-        GO
+        SHOW
       </button>
     </form>
   );
