@@ -6,6 +6,7 @@ import { NftData } from "../models/models";
 import { Draggable } from "react-beautiful-dnd";
 import { getDefaultProvider, } from "ethers"
 import { NftProvider, useNft } from "use-nft"
+import { Provider } from "ethereum-types";
 
 type NftResult = {
     status: "error" | "loading" | "done"
@@ -29,10 +30,28 @@ const SingleNFT: React.FC<{
   nftds: Array<NftData>;
   setNftds: React.Dispatch<React.SetStateAction<Array<NftData>>>;
 }> = ({ index, nftd, nftds, setNftds }) => {
-    const { status, loading, error, reload, nft } = useNft(
-        nftd.address,
-        String(nftd.tid)
-      )
+
+    function Nft() {
+        const { loading, error, nft } = useNft(
+          nftd.address,
+          nftd.tid.toString()
+        )
+        if (loading) return <>Loading…</>
+        if (error || !nft) return <>Error.</>
+        return (
+          <section>
+            <h1>{nft.name}</h1>
+            <img src={nft.image} alt="" />
+            <p>{nft.description}</p>
+            <p>Owner: {nft.owner}</p>
+            <p>Metadata URL: {nft.metadataUrl}</p>
+          </section>
+        )
+      };
+
+    const ethersConfig: any = {
+        provider: getDefaultProvider("etherscan"),
+      };
 
   const handleDelete = (id: string) => {
     setNftds(nftds.filter((nftd) => nftd.id !== id)); 
@@ -40,36 +59,15 @@ const SingleNFT: React.FC<{
 
   return (
     <Draggable draggableId={nftd.id.toString()} index={index}>
-      {(provided: any, snapshot: any) => (
-        <form
-          onSubmit={(e) => handleEdit(e, nftd.id)}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-          ref={provided.innerRef}
-          className={`nfts__single ${snapshot.isDragging ? "drag" : ""}`}
-        >
-          <div>
-            <span
-              className="icon"
-              onClick={() => {
-                if (!edit && !todo.isDone) {
-                  setEdit(!edit);
-                }
-              }}
-            >
-              <AiFillEdit />
-            </span>
-            <span className="icon" onClick={() => handleDelete(todo.id)}>
-              <AiFillDelete />
-            </span>
-            <span className="icon" onClick={() => handleDone(todo.id)}>
-              <MdDone />
-            </span>
-          </div>
-        </form>
-      )}
+      <NftProvider fetcher={["ethers", ethersConfig]}>
+        <Nft />
+      </NftProvider>
+      <span className="icon" onClick={() => handleDelete(nftd.id)}>
+        <AiFillDelete />
+      </span>
     </Draggable>
   );
 };
 
-export default SingleTodo;
+export default SingleNFT;
+
