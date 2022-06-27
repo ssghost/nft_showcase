@@ -1,6 +1,7 @@
-export interface Nft {
+export interface NftData {
+    id: string;
     address: string;
-    id: number;
+    tid: number;
     image_url: string;
     floor_price: number;
   }
