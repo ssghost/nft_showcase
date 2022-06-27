@@ -1,26 +1,53 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import InputField from "./components/InputField";
+import NFTList from "./components/NFTList";
+import { NftProvider, useNft } from "use-nft";
+import { DragDropContext, DropResult} from "react-beautiful-dnd";
+import { NftResult } from "./models/models";
+import { fetch } from "node-fetch";
 
-function App() {
+const App: React.FC = () => {
+  const [slug, setSlug] = useState<string>("");
+  const [tid, setTid] = useState<number>(0);
+  const [nftr, setNftr] = useState<NftResult>();
+  const [nftrs, setNftrs] = useState<Array<NftResult>>([]);
+
+  const HandleAdd = async (e: React.FormEvent) => {
+    e.preventDefault();
+    var address : string = "";
+
+    if ((slug !== "") && (tid !== 0)) {
+      const url = 'https://api.opensea.io/api/v1/collection/' + slug;
+      const options = {method: 'GET'};
+      const response = await fetch(url, options);
+      const data = await response.json();
+      address = data["primary_asset_contracts"]["address"];
+    };
+
+    const _nftr: NftResult = useNft(
+      address,
+      tid.toString()
+      );
+
+    setNftr(_nftr);
+    setNftrs([...nftrs, _nftr]);
+    setSlug("");
+    setTid(0);
+    };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <DragDropContext>
+      <div className="App">
+        <span className="heading">Opensea NFT Showcase</span>
+        <InputField slug={slug} setSlug={setSlug} tid={tid} setTid={setTid} HandleAdd={HandleAdd} />
+        <NFTList
+          nftrs={nftrs}
+          setNftrs={setNftrs}
+        />
+      </div>
+    </DragDropContext>
   );
-}
+};
 
 export default App;

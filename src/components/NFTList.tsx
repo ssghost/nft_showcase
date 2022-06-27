@@ -1,16 +1,16 @@
 import React from "react";
-import { NftData } from "../models/models";
+import { NftResult } from "../models/models";
 import SingleNFT from "./singleNFT";
 import { Droppable } from "react-beautiful-dnd";
 
 interface props {
-  nftds: Array<NftData>;
-  setNftds: React.Dispatch<React.SetStateAction<Array<NftData>>>;
+  nftrs: Array<NftResult>;
+  setNftrs: React.Dispatch<React.SetStateAction<Array<NftResult>>>;
 }
 
 const NFTList: React.FC<props> = ({
-  nftds,
-  setNftds,
+  nftrs,
+  setNftrs,
 }) => {
   return (
     <div className="container">
@@ -22,12 +22,12 @@ const NFTList: React.FC<props> = ({
             {...provided.droppableProps}
           >
             <span className="nfts__heading">Queried NFTs</span>
-            {nftds?.map((nftd, index) => (
+            {nftrs?.map((nftr, index) => (
               <SingleNFT
                 index={index}
-                nftds={nftds}
-                nftd={nftd}
-                setNftds={setNftds}
+                nftrs={nftrs}
+                nftr={nftr}
+                setNftrs={setNftrs}
               />
             ))}
             {provided.placeholder}

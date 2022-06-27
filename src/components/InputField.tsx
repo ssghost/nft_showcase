@@ -4,19 +4,19 @@ import "./styles.css";
 interface props {
   slug: string;
   setSlug: React.Dispatch<React.SetStateAction<string>>;
-  id: number;
-  setId: React.Dispatch<React.SetStateAction<number>>; 
-  handleAdd: (e: React.FormEvent) => void;
+  tid: number;
+  setTid: React.Dispatch<React.SetStateAction<number>>; 
+  HandleAdd: (e: React.FormEvent) => void;
 }
 
-const InputField: React.FC<props> = ({slug, setSlug, id, setId, handleAdd }) => {
+const InputField: React.FC<props> = ({slug, setSlug, tid, setTid, HandleAdd }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
     <form
       className="input"
       onSubmit={(e) => {
-        handleAdd(e);
+        HandleAdd(e);
         inputRef.current?.blur();
       }}
     >
@@ -31,9 +31,9 @@ const InputField: React.FC<props> = ({slug, setSlug, id, setId, handleAdd }) => 
       <input
         type="text"
         placeholder="Enter an NFT token id:"
-        value={id}
+        value={tid}
         ref={inputRef}
-        onChange={(e) => setId(Number(e.target.value))}
+        onChange={(e) => setTid(Number(e.target.value))}
         className="input__box"
       /> 
       <button type="submit" className="input_submit">

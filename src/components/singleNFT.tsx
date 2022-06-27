@@ -1,48 +1,28 @@
 import React from "react";
 import { AiFillDelete } from "react-icons/ai";
-import { NftData } from "../models/models";
+import { NftResult } from "../models/models";
 import { Draggable } from "react-beautiful-dnd";
 import { getDefaultProvider, } from "ethers"
 import { NftProvider, useNft } from "use-nft"
 import { Provider } from "ethereum-types";
 
-type NftResult = {
-    status: "error" | "loading" | "done"
-    loading: boolean
-    reload: () => void
-    error?: Error
-    nft?: {
-      description: string
-      image: string
-      imageType: "image" | "video" | "unknown"
-      name: string
-      owner: string
-      metadataUrl?: string
-      rawData: Record<string, unknown> | null
-    }
-  }
-
 const SingleNFT: React.FC<{
   index: number;
-  nftd: NftData;
-  nftds: Array<NftData>;
-  setNftds: React.Dispatch<React.SetStateAction<Array<NftData>>>;
-}> = ({ index, nftd, nftds, setNftds }) => {
+  nftr: NftResult;
+  nftrs: Array<NftResult>;
+  setNftrs: React.Dispatch<React.SetStateAction<Array<NftResult>>>;
+}> = ({ index, nftr, nftrs, setNftrs }) => {
 
   function Nft() {
-      const { loading, error, nft } = useNft(
-        nftd.address,
-        nftd.tid.toString()
-      )
-      if (loading) return <>Loading…</>
-      if (error || !nft) return <>Error.</>
+      if (nftr.loading) return <>Loading…</>
+      if (nftr.error || !nftr.nft) return <>Error.</>
       return (
         <section>
-          <h1>{nft.name}</h1>
-          <img src={nft.image} alt="" />
-          <p>{nft.description}</p>
-          <p>Owner: {nft.owner}</p>
-          <p>Metadata URL: {nft.metadataUrl}</p>
+          <h1>{nftr.nft.name}</h1>
+          <img src={nftr.nft.image} alt="" />
+          <p>{nftr.nft.description}</p>
+          <p>Owner: {nftr.nft.owner}</p>
+          <p>Metadata URL: {nftr.nft.metadataUrl}</p>
         </section>
       )
     };
@@ -51,16 +31,16 @@ const SingleNFT: React.FC<{
         provider: getDefaultProvider("etherscan"),
       };
 
-  const handleDelete = (id: string) => {
-    setNftds(nftds.filter((nftd) => nftd.id !== id)); 
+  const handleDelete = (name: string | undefined) => {
+    setNftrs(nftrs.filter((nftr) => nftr.nft?.name !== name)); 
   };
 
   return (
-    <Draggable draggableId={nftd.id.toString()} index={index}>
+    <Draggable draggableId={nftr.nft?.name} index={index}>
       <NftProvider fetcher={["ethers", ethersConfig]}>
         <Nft />
       </NftProvider>
-      <span className="icon" onClick={() => handleDelete(nftd.id)}>
+      <span className="icon" onClick={() => handleDelete(nftr.nft?.name)}>
         <AiFillDelete />
       </span>
     </Draggable>
