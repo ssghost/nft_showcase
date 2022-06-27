@@ -29,25 +29,25 @@ const SingleNFT: React.FC<{
   setNftds: React.Dispatch<React.SetStateAction<Array<NftData>>>;
 }> = ({ index, nftd, nftds, setNftds }) => {
 
-    function Nft() {
-        const { loading, error, nft } = useNft(
-          nftd.address,
-          nftd.tid.toString()
-        )
-        if (loading) return <>Loading…</>
-        if (error || !nft) return <>Error.</>
-        return (
-          <section>
-            <h1>{nft.name}</h1>
-            <img src={nft.image} alt="" />
-            <p>{nft.description}</p>
-            <p>Owner: {nft.owner}</p>
-            <p>Metadata URL: {nft.metadataUrl}</p>
-          </section>
-        )
-      };
+  function Nft() {
+      const { loading, error, nft } = useNft(
+        nftd.address,
+        nftd.tid.toString()
+      )
+      if (loading) return <>Loading…</>
+      if (error || !nft) return <>Error.</>
+      return (
+        <section>
+          <h1>{nft.name}</h1>
+          <img src={nft.image} alt="" />
+          <p>{nft.description}</p>
+          <p>Owner: {nft.owner}</p>
+          <p>Metadata URL: {nft.metadataUrl}</p>
+        </section>
+      )
+    };
 
-    const ethersConfig: any = {
+  const ethersConfig: any = {
         provider: getDefaultProvider("etherscan"),
       };
 
