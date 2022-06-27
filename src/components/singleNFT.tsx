@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useRef } from "react";
-import { AiFillEdit, AiFillDelete } from "react-icons/ai";
-import { MdDone } from "react-icons/md";
+import React from "react";
+import { AiFillDelete } from "react-icons/ai";
 import { NftData } from "../models/models";
 import { Draggable } from "react-beautiful-dnd";
 import { getDefaultProvider, } from "ethers"
